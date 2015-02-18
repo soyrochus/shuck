@@ -27,7 +27,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <Name>SchuckOWin</Name>
+    <Name>ShuckOWin</Name>
     <RootNamespace>Schuck</RootNamespace>
     <AssemblyName>Schuck</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
