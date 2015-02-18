@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
-    <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{c2e64583-0947-4ffb-a21b-4a39ab7c0f06}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C2E64583-0947-4FFB-A21B-4A39AB7C0F06}</ProjectGuid>
     <WebSharperProject>Site</WebSharperProject>
     <WebProjectOutputDir>$(MSBuildThisFileDirectory)</WebProjectOutputDir>
     <StartArguments>.. http://localhost:9000/</StartArguments>
@@ -39,7 +38,7 @@
     <Compile Include="Main.fs" />
     <Content Include="Main.html" />
     <Content Include="App.config" />
-    <Content Include="packages.config" />
+    <Content Include="paket.references" />
   </ItemGroup>
   <Target Name="IncludeContent" BeforeTargets="Compile">
     <ItemGroup>
@@ -54,55 +53,42 @@
     </Reference>
     <Reference Include="IntelliFactory.Formlets">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.Formlets.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.JavaScript">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.JavaScript.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.Reactive">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.Reactive.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Collections">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Collections.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Control">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Control.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Core">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Core.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Formlets">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Formlets.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Html.Client">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Html.Client.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Html.Server">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Html.Server.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.InterfaceGenerator">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.InterfaceGenerator.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.JavaScript">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.JavaScript.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.JQuery">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.JQuery.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Owin">
       <HintPath>..\packages\WebSharper.Owin.3.0.8.18-alpha\lib\net45\IntelliFactory.WebSharper.Owin.dll</HintPath>
@@ -110,64 +96,49 @@
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Sitelets">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Sitelets.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Testing">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Testing.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Web">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Web.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.Xml">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.Xml.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin">
       <HintPath>..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.Diagnostics">
       <HintPath>..\packages\Microsoft.Owin.Diagnostics.3.0.0\lib\net45\Microsoft.Owin.Diagnostics.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.FileSystems">
       <HintPath>..\packages\Microsoft.Owin.FileSystems.3.0.0\lib\net45\Microsoft.Owin.FileSystems.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.Host.HttpListener">
       <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.3.0.0\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.Hosting">
       <HintPath>..\packages\Microsoft.Owin.Hosting.3.0.0\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.StaticFiles">
       <HintPath>..\packages\Microsoft.Owin.StaticFiles.3.0.0\lib\net45\Microsoft.Owin.StaticFiles.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb">
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb">
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks">
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -196,10 +167,5 @@
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Import Project="..\packages\WebSharper.3.0.15.92-alpha\build\WebSharper.targets" Condition="Exists('..\packages\WebSharper.3.0.15.92-alpha\build\WebSharper.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\WebSharper.3.0.15.92-alpha\build\WebSharper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WebSharper.3.0.15.92-alpha\build\WebSharper.targets'))" />
-  </Target>
+  <Import Project="..\packages\WebSharper\build\WebSharper.targets" Condition="Exists('..\packages\WebSharper\build\WebSharper.targets')" Label="Paket" />
 </Project>

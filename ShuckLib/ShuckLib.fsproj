@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
-    <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{210ef6d7-190e-4631-9bd5-c913ea5d006f}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{210EF6D7-190E-4631-9BD5-C913EA5D006F}</ProjectGuid>
     <WebSharperProject>Library</WebSharperProject>
     <NuGetPackageImportStamp>ef766b20</NuGetPackageImportStamp>
   </PropertyGroup>
@@ -13,20 +12,20 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <Tailcalls>false</Tailcalls>
-    <OutputPath>bin/Debug</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <Tailcalls>true</Tailcalls>
-    <OutputPath>bin/Release</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <Name>ShuckLib</Name>
-    <RootNamespace>SchuckLib</RootNamespace>
+    <RootNamespace>Shuck</RootNamespace>
     <AssemblyName>SchuckLib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <WarningLevel>3</WarningLevel>
@@ -46,88 +45,72 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <Import Project="..\packages\WebSharper.3.0.15.92-alpha\build\WebSharper.targets" Condition="Exists('..\packages\WebSharper.3.0.15.92-alpha\build\WebSharper.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\WebSharper.3.0.15.92-alpha\build\WebSharper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WebSharper.3.0.15.92-alpha\build\WebSharper.targets'))" />
-  </Target>
   <ItemGroup>
+    <Compile Include="Types.fs" />
+    <Compile Include="Podcasts.fs" />
     <Compile Include="Main.fs" />
-    <Content Include="packages.config" />
+    <Compile Include="PodcastsTest.fs" />
+    <Content Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="IntelliFactory.Formlets">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.Formlets.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.JavaScript">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.JavaScript.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.Reactive">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.Reactive.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Collections">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Collections.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Control">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Control.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Core">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Core.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Formlets">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Formlets.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Html.Client">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Html.Client.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Html.Server">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Html.Server.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.InterfaceGenerator">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.InterfaceGenerator.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.JavaScript">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.JavaScript.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.JQuery">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.JQuery.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Sitelets">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Sitelets.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Testing">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Testing.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.WebSharper.Web">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.WebSharper.Web.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="IntelliFactory.Xml">
       <HintPath>..\packages\WebSharper.3.0.15.92-alpha\lib\net40\IntelliFactory.Xml.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit\lib\nunit.framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
+  <Import Project="..\packages\WebSharper\build\WebSharper.targets" Condition="Exists('..\packages\WebSharper\build\WebSharper.targets')" Label="Paket" />
 </Project>

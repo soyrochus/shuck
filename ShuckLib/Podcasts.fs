@@ -1,0 +1,4 @@
+﻿namespace Schuck
+open System
+
+
