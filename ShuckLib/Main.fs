@@ -1,3 +1,3 @@
-namespace SchuckLib
+namespace ShuckLib
 
 open IntelliFactory.WebSharper

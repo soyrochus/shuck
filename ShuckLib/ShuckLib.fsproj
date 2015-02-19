@@ -47,10 +47,11 @@
   <Import Project="..\packages\WebSharper.3.0.15.92-alpha\build\WebSharper.targets" Condition="Exists('..\packages\WebSharper.3.0.15.92-alpha\build\WebSharper.targets')" />
   <ItemGroup>
     <Compile Include="Types.fs" />
+    <Compile Include="Repositories.fs" />
     <Compile Include="Podcasts.fs" />
     <Compile Include="Main.fs" />
-    <Compile Include="PodcastsTest.fs" />
     <Content Include="paket.references" />
+    <Compile Include="Tests\PodcastsTest.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="IntelliFactory.Formlets">
@@ -113,4 +114,7 @@
     </Reference>
   </ItemGroup>
   <Import Project="..\packages\WebSharper\build\WebSharper.targets" Condition="Exists('..\packages\WebSharper\build\WebSharper.targets')" Label="Paket" />
+  <ItemGroup>
+    <Folder Include="Tests\" />
+  </ItemGroup>
 </Project>
