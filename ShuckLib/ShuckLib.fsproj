@@ -44,7 +44,6 @@
     </Otherwise>
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
-  <Import Project="..\packages\WebSharper\build\WebSharper.targets" Condition="Exists('..\packages\WebSharper\build\WebSharper.targets')" />
   <ItemGroup>
     <Compile Include="Types.fs" />
     <Compile Include="Repositories.fs" />
