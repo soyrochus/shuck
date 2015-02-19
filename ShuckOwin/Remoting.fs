@@ -1,4 +1,4 @@
-namespace Schuck
+namespace ShuckOwin
 
 open IntelliFactory.WebSharper
 

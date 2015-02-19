@@ -1,4 +1,4 @@
-declare module Schuck {
+declare module ShuckOwin {
     module Skin {
         interface Page {
             Title: string;

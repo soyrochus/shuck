@@ -1,8 +1,8 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,Html,Client,Default,List,Schuck,Client1,EventsPervasives,Remoting,AjaxRemotingProvider,Concurrency;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,Html,Client,Default,List,ShuckOwin,Client1,EventsPervasives,Remoting,AjaxRemotingProvider,Concurrency;
  Runtime.Define(Global,{
-  Schuck:{
+  ShuckOwin:{
    Client:{
     Main:function()
     {
@@ -29,7 +29,7 @@
      f=function()
      {
       var x,f1;
-      x=AjaxRemotingProvider.Async("Schuck:0",[input]);
+      x=AjaxRemotingProvider.Async("ShuckOwin:0",[input]);
       f1=function(_arg1)
       {
        var x1;
@@ -62,8 +62,8 @@
   Client=Runtime.Safe(Html.Client);
   Default=Runtime.Safe(Client.Default);
   List=Runtime.Safe(WebSharper.List);
-  Schuck=Runtime.Safe(Global.Schuck);
-  Client1=Runtime.Safe(Schuck.Client);
+  ShuckOwin=Runtime.Safe(Global.ShuckOwin);
+  Client1=Runtime.Safe(ShuckOwin.Client);
   EventsPervasives=Runtime.Safe(Client.EventsPervasives);
   Remoting=Runtime.Safe(WebSharper.Remoting);
   AjaxRemotingProvider=Runtime.Safe(Remoting.AjaxRemotingProvider);

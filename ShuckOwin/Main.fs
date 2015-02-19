@@ -1,4 +1,4 @@
-namespace Schuck
+namespace ShuckOwin
 
 open IntelliFactory.WebSharper.Html.Server
 open IntelliFactory.WebSharper
@@ -92,5 +92,5 @@ module SelfHostedServer =
             stdin.ReadLine() |> ignore
             0
         | _ ->
-            eprintfn "Usage: Schuck ROOT_DIRECTORY URL"
+            eprintfn "Usage: ShuckOwin ROOT_DIRECTORY URL"
             1
