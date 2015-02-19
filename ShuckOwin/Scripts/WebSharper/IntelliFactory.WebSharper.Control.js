@@ -1,6 +1,6 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,Unchecked,Seq,Option,Control,Disposable,IntrinsicFunctionProxy,FSharpEvent,Util,Event,Event1,Collections,ResizeArray,ResizeArrayProxy,EventModule,HotStream,HotStream1,Operators,Error,Concurrency,setTimeout,clearTimeout,LinkedList,ListProxy,MailboxProcessor,Observable,Observer,Observable1,List,T,Observer1;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,Unchecked,Seq,Option,Control,Disposable,Arrays,FSharpEvent,Util,Event,Event1,Collections,ResizeArray,ResizeArrayProxy,EventModule,HotStream,HotStream1,Operators,Error,Concurrency,setTimeout,clearTimeout,LinkedList,ListProxy,MailboxProcessor,Observable,Observer,Observable1,List,T,Observer1;
  Runtime.Define(Global,{
   IntelliFactory:{
    WebSharper:{
@@ -53,7 +53,7 @@
         var arr,idx,h;
         arr=this.Handlers.ToArray();
         for(idx=0;idx<=arr.length-1;idx++){
-         h=IntrinsicFunctionProxy.GetArray(arr,idx);
+         h=Arrays.get(arr,idx);
          h(x);
         }
         return;
@@ -304,7 +304,7 @@
       {
        var timeout1,arg00,_this=this;
        timeout1=Operators.DefaultArg(timeout,this.get_DefaultTimeout());
-       arg00=Runtime.Tupled(function(tupledArg)
+       arg00=function(tupledArg)
        {
         var ok,_arg3,_arg4,_,arg001,value,waiting,arg002,value1,value2;
         ok=tupledArg[0];
@@ -365,7 +365,7 @@
           _=void value2;
          }
         return _;
-       });
+       };
        return Concurrency.FromContinuations(arg00);
       },
       Receive:function(timeout)
@@ -462,7 +462,7 @@
       {
        var timeout1,arg00,_this=this;
        timeout1=Operators.DefaultArg(timeout,this.get_DefaultTimeout());
-       arg00=Runtime.Tupled(function(tupledArg)
+       arg00=function(tupledArg)
        {
         var ok,_arg1,_arg2,_,_1,f,arg01,waiting,pending,f1,arg02,arg03;
         ok=tupledArg[0];
@@ -549,7 +549,7 @@
           });
          }
         return _;
-       });
+       };
        return Concurrency.FromContinuations(arg00);
       },
       TryScan:function(scanner,timeout)
@@ -599,7 +599,7 @@
          }
         else
          {
-          arg00=Runtime.Tupled(function(tupledArg)
+          arg00=function(tupledArg)
           {
            var ok,_arg5,_arg6,_,scanNext,waiting,pending,scanNext1;
            ok=tupledArg[0];
@@ -717,7 +717,7 @@
              _=scanNext1(null);
             }
            return _;
-          });
+          };
           x1=Concurrency.FromContinuations(arg00);
           _1=x1;
          }
@@ -1518,7 +1518,7 @@
   Option=Runtime.Safe(WebSharper.Option);
   Control=Runtime.Safe(WebSharper.Control);
   Disposable=Runtime.Safe(Control.Disposable);
-  IntrinsicFunctionProxy=Runtime.Safe(WebSharper.IntrinsicFunctionProxy);
+  Arrays=Runtime.Safe(WebSharper.Arrays);
   FSharpEvent=Runtime.Safe(Control.FSharpEvent);
   Util=Runtime.Safe(WebSharper.Util);
   Event=Runtime.Safe(Control.Event);

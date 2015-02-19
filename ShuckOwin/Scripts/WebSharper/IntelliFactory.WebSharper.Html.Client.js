@@ -598,14 +598,12 @@
         },
         OnKeyDown:function(f,el)
         {
-         var h;
-         h=function(ev)
+         return jQuery(el.get_Body()).bind("keydown",function(ev)
          {
           return(f(el))({
            KeyCode:ev.keyCode
           });
-         };
-         return jQuery(el.get_Body()).bind("keydown",h);
+         });
         },
         OnKeyPress:function(f,el)
         {
@@ -618,14 +616,12 @@
         },
         OnKeyUp:function(f,el)
         {
-         var h;
-         h=function(ev)
+         return jQuery(el.get_Body()).bind("keyup",function(ev)
          {
           return(f(el))({
            KeyCode:ev.keyCode
           });
-         };
-         return jQuery(el.get_Body()).bind("keyup",h);
+         });
         },
         OnLoad:function(f,el)
         {
@@ -636,15 +632,13 @@
         },
         OnMouse:function(name,f,el)
         {
-         var h;
-         h=function(ev)
+         return jQuery(el.get_Body()).bind(name,function(ev)
          {
           return(f(el))({
            X:ev.pageX,
            Y:ev.pageY
           });
-         };
-         return jQuery(el.get_Body()).bind(name,h);
+         });
         },
         OnMouseDown:function(f,el)
         {

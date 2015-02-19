@@ -25,8 +25,8 @@ declare module IntelliFactory {
             var reverse : {
                 (array: __ABBREV.__WebSharper.ArrayProxy, offset: number, length: number): void;
             };
-            var checkRange : {
-                <_M1>(arr: _M1[], start: number, size: number): void;
+            var create2D : {
+                <_M1, _M2>(rows: __ABBREV.__WebSharper.seq<_M1>): any;
             };
             var checkLength : {
                 <_M1, _M2>(arr1: _M1[], arr2: _M2[]): void;
@@ -73,12 +73,12 @@ declare module IntelliFactory {
                     (x: _M1): boolean;
                 }, arr: _M1[]): _M1[];
             };
-            var Find : {
+            var find : {
                 <_M1>(f: {
                     (x: _M1): boolean;
                 }, arr: _M1[]): _M1;
             };
-            var FindIndex : {
+            var findINdex : {
                 <_M1>(f: {
                     (x: _M1): boolean;
                 }, arr: _M1[]): number;
@@ -212,7 +212,7 @@ declare module IntelliFactory {
                     (x: number): number;
                 }, arr: _M1[]): _M1[];
             };
-            var Pick : {
+            var pick : {
                 <_M1, _M2>(f: {
                     (x: _M1): __ABBREV.__WebSharper.OptionProxy<_M2>;
                 }, arr: _M1[]): _M2;
@@ -278,9 +278,6 @@ declare module IntelliFactory {
                     };
                 }, arr: _M1[]): _M1[];
             };
-            var sub : {
-                <_M1>(arr: _M1[], start: number, length: number): _M1[];
-            };
             var tryFind : {
                 <_M1>(f: {
                     (x: _M1): boolean;
@@ -308,6 +305,45 @@ declare module IntelliFactory {
             var zip3 : {
                 <_M1, _M2, _M3>(arr1: _M1[], arr2: _M2[], arr3: _M3[]): any[];
             };
+            var checkBounds : {
+                <_M1>(arr: _M1[], n: number): void;
+            };
+            var checkBounds2D : {
+                <_M1>(arr: any, n1: number, n2: number): void;
+            };
+            var checkRange : {
+                <_M1>(arr: _M1[], start: number, size: number): void;
+            };
+            var set : {
+                <_M1>(arr: _M1[], n: number, x: _M1): void;
+            };
+            var get : {
+                <_M1>(arr: _M1[], n: number): _M1;
+            };
+            var sub : {
+                <_M1>(arr: _M1[], start: number, length: number): _M1[];
+            };
+            var setSub : {
+                <_M1>(arr: _M1[], start: number, len: number, src: _M1[]): void;
+            };
+            var get2D : {
+                <_M1>(arr: any, n1: number, n2: number): _M1;
+            };
+            var set2D : {
+                <_M1>(arr: any, n1: number, n2: number, x: _M1): void;
+            };
+            var zeroCreate2D : {
+                <_M1>(n: number, m: number): any;
+            };
+            var sub2D : {
+                <_M1>(src: any, src1: number, src2: number, len1: number, len2: number): any;
+            };
+            var setSub2D : {
+                <_M1>(dst: any, src1: number, src2: number, len1: number, len2: number, src: any): void;
+            };
+            var length : {
+                <_M1>(arr: __ABBREV.__WebSharper.ArrayProxy): number;
+            };
         }
         module AsyncProxy {
             var get_DefaultCancellationToken : {
@@ -318,10 +354,10 @@ declare module IntelliFactory {
             };
         }
         module CancellationTokenSource {
-            var CreateLinkedTokenSource : {
+            var CreateLinkedTokenSource1 : {
                 (tokens: __ABBREV.__WebSharper.CancellationTokenProxy[]): void;
             };
-            var CreateLinkedTokenSource1 : {
+            var CreateLinkedTokenSource : {
                 (t1: __ABBREV.__WebSharper.CancellationTokenProxy, t2: __ABBREV.__WebSharper.CancellationTokenProxy): void;
             };
         }
@@ -1071,32 +1107,32 @@ declare module IntelliFactory {
                 <_M1>(x: __ABBREV.__WebSharper.OptionProxy<_M1>): __ABBREV.__List.T<_M1>;
             };
         }
-        module OperatorIntrinsics {
-            var GetStringSlice : {
+        module Slice {
+            var string : {
                 (source: string, start: __ABBREV.__WebSharper.OptionProxy<number>, finish: __ABBREV.__WebSharper.OptionProxy<number>): string;
             };
-            var GetArraySlice : {
+            var array : {
                 <_M1>(source: _M1[], start: __ABBREV.__WebSharper.OptionProxy<number>, finish: __ABBREV.__WebSharper.OptionProxy<number>): _M1[];
             };
-            var SetArraySlice : {
+            var setArray : {
                 <_M1>(dst: _M1[], start: __ABBREV.__WebSharper.OptionProxy<number>, finish: __ABBREV.__WebSharper.OptionProxy<number>, src: _M1[]): void;
             };
-            var GetArraySlice2D : {
+            var array2D : {
                 <_M1>(arr: any, start1: __ABBREV.__WebSharper.OptionProxy<number>, finish1: __ABBREV.__WebSharper.OptionProxy<number>, start2: __ABBREV.__WebSharper.OptionProxy<number>, finish2: __ABBREV.__WebSharper.OptionProxy<number>): any;
             };
-            var GetArraySlice2DFixed1 : {
+            var array2Dfix1 : {
                 <_M1>(arr: any, fixed1: number, start2: __ABBREV.__WebSharper.OptionProxy<number>, finish2: __ABBREV.__WebSharper.OptionProxy<number>): _M1[];
             };
-            var GetArraySlice2DFixed2 : {
+            var array2Dfix2 : {
                 <_M1>(arr: any, start1: __ABBREV.__WebSharper.OptionProxy<number>, finish1: __ABBREV.__WebSharper.OptionProxy<number>, fixed2: number): _M1[];
             };
-            var SetArraySlice2DFixed1 : {
+            var setArray2Dfix1 : {
                 <_M1>(dst: any, fixed1: number, start2: __ABBREV.__WebSharper.OptionProxy<number>, finish2: __ABBREV.__WebSharper.OptionProxy<number>, src: _M1[]): void;
             };
-            var SetArraySlice2DFixed2 : {
+            var setArray2Dfix2 : {
                 <_M1>(dst: any, start1: __ABBREV.__WebSharper.OptionProxy<number>, finish1: __ABBREV.__WebSharper.OptionProxy<number>, fixed2: number, src: _M1[]): void;
             };
-            var SetArraySlice2D : {
+            var setArray2D : {
                 <_M1>(dst: any, start1: __ABBREV.__WebSharper.OptionProxy<number>, finish1: __ABBREV.__WebSharper.OptionProxy<number>, start2: __ABBREV.__WebSharper.OptionProxy<number>, finish2: __ABBREV.__WebSharper.OptionProxy<number>, src: any): void;
             };
         }
@@ -1159,11 +1195,6 @@ declare module IntelliFactory {
                 <_M1>(x: __ABBREV.__WebSharper.LazyProxy<_M1>): _M1;
             };
         }
-        module ExtraTopLevelOperatorsProxy {
-            var array2D : {
-                <_M1, _M2>(rows: __ABBREV.__WebSharper.seq<_M1>): any;
-            };
-        }
         module Util {
             var observer : {
                 <_M1>(h: {
@@ -1182,9 +1213,6 @@ declare module IntelliFactory {
             };
         }
         module Arrays2D {
-            var zeroCreate : {
-                <_M1>(n: number, m: number): any;
-            };
             var init : {
                 <_M1>(n: number, m: number, f: {
                     (x: number): {
@@ -1224,43 +1252,27 @@ declare module IntelliFactory {
                 <_M1>(array: any): any;
             };
         }
-        module IntrinsicFunctionProxy {
-            var BoundsCheck : {
-                <_M1>(arr: _M1[], n: number): void;
-            };
-            var BoundsCheck2D : {
-                <_M1>(arr: any, n1: number, n2: number): void;
-            };
-            var SetArray : {
-                <_M1>(arr: _M1[], n: number, x: _M1): void;
-            };
-            var GetArray : {
-                <_M1>(arr: _M1[], n: number): _M1;
-            };
-            var GetArraySub : {
-                <_M1>(arr: _M1[], start: number, len: number): _M1[];
-            };
-            var SetArraySub : {
-                <_M1>(arr: _M1[], start: number, len: number, src: _M1[]): void;
-            };
-            var GetArray2D : {
-                <_M1>(arr: any, n1: number, n2: number): _M1;
-            };
-            var SetArray2D : {
-                <_M1>(arr: any, n1: number, n2: number, x: _M1): void;
-            };
-            var Array2DZeroCreate : {
-                <_M1>(n: number, m: number): any;
-            };
-            var GetArray2DSub : {
-                <_M1>(src: any, src1: number, src2: number, len1: number, len2: number): any;
-            };
-            var SetArray2DSub : {
-                <_M1>(dst: any, src1: number, src2: number, len1: number, len2: number, src: any): void;
-            };
-            var GetLength : {
-                <_M1>(arr: __ABBREV.__WebSharper.ArrayProxy): number;
-            };
+        module InteropProxy {
+            interface FuncWithArgsProxy<_T1, _T2> {
+            }
+            interface FuncWithThisProxy<_T1, _T2> {
+            }
+            interface FuncWithRestProxy<_T1, _T2> {
+            }
+            interface FuncWithRestProxy4<_T1, _T2, _T3> {
+            }
+            interface FuncWithRestProxy1<_T1, _T2, _T3, _T4> {
+            }
+            interface FuncWithRestProxy2<_T1, _T2, _T3, _T4, _T5> {
+            }
+            interface FuncWithRestProxy3<_T1, _T2, _T3, _T4, _T5, _T6> {
+            }
+            interface FuncWithRestProxy11<_T1, _T2, _T3, _T4, _T5, _T6, _T7> {
+            }
+            interface FuncWithRestProxy21<_T1, _T2, _T3, _T4, _T5, _T6, _T7, _T8> {
+            }
+            interface FuncWithArgsRestProxy<_T1, _T2, _T3> {
+            }
         }
         module JavaScript {
             module Pervasives {
@@ -1357,13 +1369,13 @@ declare module IntelliFactory {
         }
         interface ChoiceProxy11<_T1, _T2> {
         }
-        interface ChoiceProxy3<_T1, _T2, _T3> {
+        interface ChoiceProxy2<_T1, _T2, _T3> {
         }
-        interface ChoiceProxy1<_T1, _T2, _T3, _T4> {
+        interface ChoiceProxy12<_T1, _T2, _T3, _T4> {
         }
-        interface ChoiceProxy2<_T1, _T2, _T3, _T4, _T5> {
+        interface ChoiceProxy3<_T1, _T2, _T3, _T4, _T5> {
         }
-        interface ChoiceProxy4<_T1, _T2, _T3, _T4, _T5, _T6> {
+        interface ChoiceProxy1<_T1, _T2, _T3, _T4, _T5, _T6> {
         }
         interface ChoiceProxy<_T1, _T2, _T3, _T4, _T5, _T6, _T7> {
         }

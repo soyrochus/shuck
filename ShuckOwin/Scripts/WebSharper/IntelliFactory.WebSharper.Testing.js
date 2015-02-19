@@ -1,6 +1,6 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,IntrinsicFunctionProxy,ok,Unchecked,console,Testing,Pervasives,TestBuilder,test,Random,Arrays,Math,NaN1,Infinity1,List,String,Seq;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,Arrays,ok,Unchecked,console,Testing,Pervasives,TestBuilder,test,Random,Math,NaN1,Infinity1,List,String,Seq;
  Runtime.Define(Global,{
   IntelliFactory:{
    WebSharper:{
@@ -10,8 +10,8 @@
       {
        var _this,i,i1;
        _this=gen.Base;
-       for(i=0;i<=IntrinsicFunctionProxy.GetLength(_this)-1;i++){
-        attempt(IntrinsicFunctionProxy.GetArray(gen.Base,i));
+       for(i=0;i<=Arrays.length(_this)-1;i++){
+        attempt(Arrays.get(gen.Base,i));
        }
        for(i1=1;i1<=times;i1++){
         attempt(gen.Next.call(null,null));
@@ -245,12 +245,12 @@
       OneOf:function(seeds)
       {
        var index;
-       index=Random.Within(1,IntrinsicFunctionProxy.GetLength(seeds));
+       index=Random.Within(1,Arrays.length(seeds));
        return{
         Base:seeds,
         Next:function()
         {
-         return IntrinsicFunctionProxy.GetArray(seeds,index.Next.call(null,null)-1);
+         return Arrays.get(seeds,index.Next.call(null,null)-1);
         }
        };
       },
@@ -358,7 +358,7 @@
  Runtime.OnInit(function()
  {
   WebSharper=Runtime.Safe(Global.IntelliFactory.WebSharper);
-  IntrinsicFunctionProxy=Runtime.Safe(WebSharper.IntrinsicFunctionProxy);
+  Arrays=Runtime.Safe(WebSharper.Arrays);
   ok=Runtime.Safe(Global.ok);
   Unchecked=Runtime.Safe(WebSharper.Unchecked);
   console=Runtime.Safe(Global.console);
@@ -367,7 +367,6 @@
   TestBuilder=Runtime.Safe(Pervasives.TestBuilder);
   test=Runtime.Safe(Global.test);
   Random=Runtime.Safe(Testing.Random);
-  Arrays=Runtime.Safe(WebSharper.Arrays);
   Math=Runtime.Safe(Global.Math);
   NaN1=Runtime.Safe(Global.NaN);
   Infinity1=Runtime.Safe(Global.Infinity);

@@ -1,6 +1,6 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,Arrays,Operators,Number,IntrinsicFunctionProxy,Array,Seq,Unchecked,Enumerator,Arrays2D,Concurrency,AggregateException,Option,clearTimeout,setTimeout,CancellationTokenSource,Char,Util,Lazy,Error,Date,console,Scheduler,T,Html,Client,Activator,document,jQuery,Json,JSON,JavaScript,JSModule,HtmlContentExtensions,SingleNode,List,T1,Math,Strings,PrintfHelpers,Remoting,XhrProvider,AsyncProxy,AjaxRemotingProvider,window,Enumerable,String,RegExp;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,Number,WebSharper,Arrays,Operators,Error,Array,Seq,Unchecked,Enumerator,Arrays2D,Concurrency,AggregateException,Option,clearTimeout,setTimeout,CancellationTokenSource,Char,Util,Lazy,Date,console,Scheduler,T,Html,Client,Activator,document,jQuery,Json,JSON,JavaScript,JSModule,HtmlContentExtensions,SingleNode,List,T1,Math,Strings,PrintfHelpers,Remoting,XhrProvider,AsyncProxy,AjaxRemotingProvider,window,Enumerable,String,RegExp;
  Runtime.Define(Global,{
   IntelliFactory:{
    WebSharper:{
@@ -12,58 +12,13 @@
      }
     }),
     Arrays:{
-     Find:function(f,arr)
-     {
-      var matchValue,_,x;
-      matchValue=Arrays.tryFind(f,arr);
-      if(matchValue.$==0)
-       {
-        _=Operators.FailWith("KeyNotFoundException");
-       }
-      else
-       {
-        x=matchValue.$0;
-        _=x;
-       }
-      return _;
-     },
-     FindIndex:function(f,arr)
-     {
-      var matchValue,_,x;
-      matchValue=Arrays.tryFindIndex(f,arr);
-      if(matchValue.$==0)
-       {
-        _=Operators.FailWith("KeyNotFoundException");
-       }
-      else
-       {
-        x=matchValue.$0;
-        _=x;
-       }
-      return _;
-     },
-     Pick:function(f,arr)
-     {
-      var matchValue,_,x;
-      matchValue=Arrays.tryPick(f,arr);
-      if(matchValue.$==0)
-       {
-        _=Operators.FailWith("KeyNotFoundException");
-       }
-      else
-       {
-        x=matchValue.$0;
-        _=x;
-       }
-      return _;
-     },
      average:function(arr)
      {
-      return Number(Arrays.sum(arr))/Number(IntrinsicFunctionProxy.GetLength(arr));
+      return Number(Arrays.sum(arr))/Number(arr.length);
      },
      averageBy:function(f,arr)
      {
-      return Number(Arrays.sumBy(f,arr))/Number(IntrinsicFunctionProxy.GetLength(arr));
+      return Number(Arrays.sumBy(f,arr))/Number(arr.length);
      },
      blit:function(arr1,start1,arr2,start2,length)
      {
@@ -71,24 +26,32 @@
       Arrays.checkRange(arr1,start1,length);
       Arrays.checkRange(arr2,start2,length);
       for(i=0;i<=length-1;i++){
-       IntrinsicFunctionProxy.SetArray(arr2,start2+i,IntrinsicFunctionProxy.GetArray(arr1,start1+i));
+       Arrays.set(arr2,start2+i,Arrays.get(arr1,start1+i));
       }
       return;
      },
+     checkBounds:function(arr,n)
+     {
+      return(n<0?true:n>=arr.length)?Operators.FailWith("Index was outside the bounds of the array."):null;
+     },
+     checkBounds2D:function(arr,n1,n2)
+     {
+      return(((n1<0?true:n2<0)?true:n1>=arr.length)?true:n2>=(arr.length?arr[0].length:0))?Operators.Raise(new Error("IndexOutOfRangeException")):null;
+     },
      checkLength:function(arr1,arr2)
      {
-      return IntrinsicFunctionProxy.GetLength(arr1)!==IntrinsicFunctionProxy.GetLength(arr2)?Operators.FailWith("Arrays differ in length."):null;
+      return arr1.length!==arr2.length?Operators.FailWith("Arrays differ in length."):null;
      },
      checkRange:function(arr,start,size)
      {
-      return((size<0?true:start<0)?true:IntrinsicFunctionProxy.GetLength(arr)<start+size)?Operators.FailWith("Index was outside the bounds of the array."):null;
+      return((size<0?true:start<0)?true:arr.length<start+size)?Operators.FailWith("Index was outside the bounds of the array."):null;
      },
      choose:function(f,arr)
      {
       var q,i,matchValue,_,x;
       q=[];
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       matchValue=f(IntrinsicFunctionProxy.GetArray(arr,i));
+      for(i=0;i<=arr.length-1;i++){
+       matchValue=f(Arrays.get(arr,i));
        if(matchValue.$==0)
         {
          _=null;
@@ -114,9 +77,21 @@
       var r,i;
       r=Array(size);
       for(i=0;i<=size-1;i++){
-       IntrinsicFunctionProxy.SetArray(r,i,value);
+       Arrays.set(r,i,value);
       }
       return r;
+     },
+     create2D:function(rows)
+     {
+      var mapping,source1,x;
+      mapping=function(source)
+      {
+       return Arrays.ofSeq(source);
+      };
+      source1=Seq.map(mapping,rows);
+      x=Arrays.ofSeq(source1);
+      x.dims=2;
+      return x;
      },
      exists2:function(f,arr1,arr2)
      {
@@ -128,7 +103,7 @@
       var i;
       Arrays.checkRange(arr,start,length);
       for(i=start;i<=start+length-1;i++){
-       IntrinsicFunctionProxy.SetArray(arr,i,value);
+       Arrays.set(arr,i,value);
       }
       return;
      },
@@ -136,17 +111,47 @@
      {
       var r,i;
       r=[];
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       f(IntrinsicFunctionProxy.GetArray(arr,i))?r.push(IntrinsicFunctionProxy.GetArray(arr,i)):null;
+      for(i=0;i<=arr.length-1;i++){
+       f(Arrays.get(arr,i))?r.push(Arrays.get(arr,i)):null;
       }
       return r;
+     },
+     find:function(f,arr)
+     {
+      var matchValue,_,x;
+      matchValue=Arrays.tryFind(f,arr);
+      if(matchValue.$==0)
+       {
+        _=Operators.FailWith("KeyNotFoundException");
+       }
+      else
+       {
+        x=matchValue.$0;
+        _=x;
+       }
+      return _;
+     },
+     findINdex:function(f,arr)
+     {
+      var matchValue,_,x;
+      matchValue=Arrays.tryFindIndex(f,arr);
+      if(matchValue.$==0)
+       {
+        _=Operators.FailWith("KeyNotFoundException");
+       }
+      else
+       {
+        x=matchValue.$0;
+        _=x;
+       }
+      return _;
      },
      fold:function(f,zero,arr)
      {
       var acc,i;
       acc=zero;
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       acc=(f(acc))(IntrinsicFunctionProxy.GetArray(arr,i));
+      for(i=0;i<=arr.length-1;i++){
+       acc=(f(acc))(Arrays.get(arr,i));
       }
       return acc;
      },
@@ -156,7 +161,7 @@
       Arrays.checkLength(arr1,arr2);
       accum=zero;
       for(i=0;i<=arr1.length-1;i++){
-       accum=((f(accum))(IntrinsicFunctionProxy.GetArray(arr1,i)))(IntrinsicFunctionProxy.GetArray(arr2,i));
+       accum=((f(accum))(Arrays.get(arr1,i)))(Arrays.get(arr2,i));
       }
       return accum;
      },
@@ -164,9 +169,9 @@
      {
       var acc,len,i;
       acc=zero;
-      len=IntrinsicFunctionProxy.GetLength(arr);
+      len=arr.length;
       for(i=1;i<=len;i++){
-       acc=(f(IntrinsicFunctionProxy.GetArray(arr,len-i)))(acc);
+       acc=(f(Arrays.get(arr,len-i)))(acc);
       }
       return acc;
      },
@@ -174,10 +179,10 @@
      {
       var len,accum,i;
       Arrays.checkLength(arr1,arr2);
-      len=IntrinsicFunctionProxy.GetLength(arr1);
+      len=arr1.length;
       accum=zero;
       for(i=1;i<=len;i++){
-       accum=((f(IntrinsicFunctionProxy.GetArray(arr1,len-i)))(IntrinsicFunctionProxy.GetArray(arr2,len-i)))(accum);
+       accum=((f(Arrays.get(arr1,len-i)))(Arrays.get(arr2,len-i)))(accum);
       }
       return accum;
      },
@@ -186,21 +191,31 @@
       Arrays.checkLength(arr1,arr2);
       return Seq.forall2(f,arr1,arr2);
      },
+     get:function(arr,n)
+     {
+      Arrays.checkBounds(arr,n);
+      return arr[n];
+     },
+     get2D:function(arr,n1,n2)
+     {
+      Arrays.checkBounds2D(arr,n1,n2);
+      return arr[n1][n2];
+     },
      init:function(size,f)
      {
       var r,i;
       size<0?Operators.FailWith("Negative size given."):null;
       r=Array(size);
       for(i=0;i<=size-1;i++){
-       IntrinsicFunctionProxy.SetArray(r,i,f(i));
+       Arrays.set(r,i,f(i));
       }
       return r;
      },
      iter:function(f,arr)
      {
       var i;
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       f(IntrinsicFunctionProxy.GetArray(arr,i));
+      for(i=0;i<=arr.length-1;i++){
+       f(Arrays.get(arr,i));
       }
       return;
      },
@@ -208,16 +223,16 @@
      {
       var i;
       Arrays.checkLength(arr1,arr2);
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr1)-1;i++){
-       (f(IntrinsicFunctionProxy.GetArray(arr1,i)))(IntrinsicFunctionProxy.GetArray(arr2,i));
+      for(i=0;i<=arr1.length-1;i++){
+       (f(Arrays.get(arr1,i)))(Arrays.get(arr2,i));
       }
       return;
      },
      iteri:function(f,arr)
      {
       var i;
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       (f(i))(IntrinsicFunctionProxy.GetArray(arr,i));
+      for(i=0;i<=arr.length-1;i++){
+       (f(i))(Arrays.get(arr,i));
       }
       return;
      },
@@ -225,17 +240,23 @@
      {
       var i;
       Arrays.checkLength(arr1,arr2);
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr1)-1;i++){
-       ((f(i))(IntrinsicFunctionProxy.GetArray(arr1,i)))(IntrinsicFunctionProxy.GetArray(arr2,i));
+      for(i=0;i<=arr1.length-1;i++){
+       ((f(i))(Arrays.get(arr1,i)))(Arrays.get(arr2,i));
       }
       return;
+     },
+     length:function(arr)
+     {
+      var matchValue;
+      matchValue=arr.dims;
+      return matchValue===2?arr.length*arr.length:arr.length;
      },
      map:function(f,arr)
      {
       var r,i;
-      r=Array(IntrinsicFunctionProxy.GetLength(arr));
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       IntrinsicFunctionProxy.SetArray(r,i,f(IntrinsicFunctionProxy.GetArray(arr,i)));
+      r=Array(arr.length);
+      for(i=0;i<=arr.length-1;i++){
+       Arrays.set(r,i,f(Arrays.get(arr,i)));
       }
       return r;
      },
@@ -243,18 +264,18 @@
      {
       var r,i;
       Arrays.checkLength(arr1,arr2);
-      r=Array(IntrinsicFunctionProxy.GetLength(arr2));
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr2)-1;i++){
-       IntrinsicFunctionProxy.SetArray(r,i,(f(IntrinsicFunctionProxy.GetArray(arr1,i)))(IntrinsicFunctionProxy.GetArray(arr2,i)));
+      r=Array(arr2.length);
+      for(i=0;i<=arr2.length-1;i++){
+       Arrays.set(r,i,(f(Arrays.get(arr1,i)))(Arrays.get(arr2,i)));
       }
       return r;
      },
      mapi:function(f,arr)
      {
       var y,i;
-      y=Array(IntrinsicFunctionProxy.GetLength(arr));
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       IntrinsicFunctionProxy.SetArray(y,i,(f(i))(IntrinsicFunctionProxy.GetArray(arr,i)));
+      y=Array(arr.length);
+      for(i=0;i<=arr.length-1;i++){
+       Arrays.set(y,i,(f(i))(Arrays.get(arr,i)));
       }
       return y;
      },
@@ -262,9 +283,9 @@
      {
       var res,i;
       Arrays.checkLength(arr1,arr2);
-      res=Array(IntrinsicFunctionProxy.GetLength(arr1));
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr1)-1;i++){
-       IntrinsicFunctionProxy.SetArray(res,i,((f(i))(IntrinsicFunctionProxy.GetArray(arr1,i)))(IntrinsicFunctionProxy.GetArray(arr2,i)));
+      res=Array(arr1.length);
+      for(i=0;i<=arr1.length-1;i++){
+       Arrays.set(res,i,((f(i))(Arrays.get(arr1,i)))(Arrays.get(arr2,i)));
       }
       return res;
      },
@@ -310,7 +331,7 @@
      },
      nonEmpty:function(arr)
      {
-      return IntrinsicFunctionProxy.GetLength(arr)===0?Operators.FailWith("The input array was empty."):null;
+      return arr.length===0?Operators.FailWith("The input array was empty."):null;
      },
      ofSeq:function(xs)
      {
@@ -328,27 +349,42 @@
       var ret1,ret2,i;
       ret1=[];
       ret2=[];
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       f(IntrinsicFunctionProxy.GetArray(arr,i))?ret1.push(IntrinsicFunctionProxy.GetArray(arr,i)):ret2.push(IntrinsicFunctionProxy.GetArray(arr,i));
+      for(i=0;i<=arr.length-1;i++){
+       f(Arrays.get(arr,i))?ret1.push(Arrays.get(arr,i)):ret2.push(Arrays.get(arr,i));
       }
       return[ret1,ret2];
      },
      permute:function(f,arr)
      {
       var ret,i;
-      ret=Array(IntrinsicFunctionProxy.GetLength(arr));
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       IntrinsicFunctionProxy.SetArray(ret,f(i),IntrinsicFunctionProxy.GetArray(arr,i));
+      ret=Array(arr.length);
+      for(i=0;i<=arr.length-1;i++){
+       Arrays.set(ret,f(i),Arrays.get(arr,i));
       }
       return ret;
+     },
+     pick:function(f,arr)
+     {
+      var matchValue,_,x;
+      matchValue=Arrays.tryPick(f,arr);
+      if(matchValue.$==0)
+       {
+        _=Operators.FailWith("KeyNotFoundException");
+       }
+      else
+       {
+        x=matchValue.$0;
+        _=x;
+       }
+      return _;
      },
      reduce:function(f,arr)
      {
       var acc,i;
       Arrays.nonEmpty(arr);
-      acc=IntrinsicFunctionProxy.GetArray(arr,0);
-      for(i=1;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       acc=(f(acc))(IntrinsicFunctionProxy.GetArray(arr,i));
+      acc=Arrays.get(arr,0);
+      for(i=1;i<=arr.length-1;i++){
+       acc=(f(acc))(Arrays.get(arr,i));
       }
       return acc;
      },
@@ -356,10 +392,10 @@
      {
       var len,acc,i;
       Arrays.nonEmpty(arr);
-      len=IntrinsicFunctionProxy.GetLength(arr);
-      acc=IntrinsicFunctionProxy.GetArray(arr,len-1);
+      len=arr.length;
+      acc=Arrays.get(arr,len-1);
       for(i=2;i<=len;i++){
-       acc=(f(IntrinsicFunctionProxy.GetArray(arr,len-i)))(acc);
+       acc=(f(Arrays.get(arr,len-i)))(acc);
       }
       return acc;
      },
@@ -367,28 +403,58 @@
      {
       var a;
       a=Arrays.sub(array,offset,length).slice().reverse();
-      return Arrays.blit(a,0,array,offset,IntrinsicFunctionProxy.GetLength(a));
+      return Arrays.blit(a,0,array,offset,Arrays.length(a));
      },
      scan:function(f,zero,arr)
      {
       var ret,i;
-      ret=Array(1+IntrinsicFunctionProxy.GetLength(arr));
-      IntrinsicFunctionProxy.SetArray(ret,0,zero);
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       IntrinsicFunctionProxy.SetArray(ret,i+1,(f(IntrinsicFunctionProxy.GetArray(ret,i)))(IntrinsicFunctionProxy.GetArray(arr,i)));
+      ret=Array(1+arr.length);
+      Arrays.set(ret,0,zero);
+      for(i=0;i<=arr.length-1;i++){
+       Arrays.set(ret,i+1,(f(Arrays.get(ret,i)))(Arrays.get(arr,i)));
       }
       return ret;
      },
      scanBack:function(f,arr,zero)
      {
       var len,ret,i;
-      len=IntrinsicFunctionProxy.GetLength(arr);
+      len=arr.length;
       ret=Array(1+len);
-      IntrinsicFunctionProxy.SetArray(ret,len,zero);
+      Arrays.set(ret,len,zero);
       for(i=0;i<=len-1;i++){
-       IntrinsicFunctionProxy.SetArray(ret,len-i-1,(f(IntrinsicFunctionProxy.GetArray(arr,len-i-1)))(IntrinsicFunctionProxy.GetArray(ret,len-i)));
+       Arrays.set(ret,len-i-1,(f(Arrays.get(arr,len-i-1)))(Arrays.get(ret,len-i)));
       }
       return ret;
+     },
+     set:function(arr,n,x)
+     {
+      Arrays.checkBounds(arr,n);
+      arr[n]=x;
+      return;
+     },
+     set2D:function(arr,n1,n2,x)
+     {
+      Arrays.checkBounds2D(arr,n1,n2);
+      arr[n1][n2]=x;
+      return;
+     },
+     setSub:function(arr,start,len,src)
+     {
+      var i;
+      for(i=0;i<=len-1;i++){
+       Arrays.set(arr,start+i,Arrays.get(src,i));
+      }
+      return;
+     },
+     setSub2D:function(dst,src1,src2,len1,len2,src)
+     {
+      var i,j;
+      for(i=0;i<=len1-1;i++){
+       for(j=0;j<=len2-1;j++){
+        Arrays.set2D(dst,src1+i,src2+j,Arrays.get2D(src,i,j));
+       }
+      }
+      return;
      },
      sort:function(arr)
      {
@@ -399,15 +465,10 @@
      },
      sortBy:function(f,arr)
      {
-      var f1;
-      f1=Runtime.Tupled(function(tupledArg)
+      return arr.slice().sort(function(x,y)
       {
-       var x,y;
-       x=tupledArg[0];
-       y=tupledArg[1];
        return Operators.Compare(f(x),f(y));
       });
-      return arr.slice().sort(f1);
      },
      sortInPlace:function(arr)
      {
@@ -418,44 +479,42 @@
      },
      sortInPlaceBy:function(f,arr)
      {
-      var f1;
-      f1=Runtime.Tupled(function(tupledArg)
+      return arr.sort(function(x,y)
       {
-       var x,y;
-       x=tupledArg[0];
-       y=tupledArg[1];
        return Operators.Compare(f(x),f(y));
       });
-      return arr.sort(f1);
      },
      sortInPlaceWith:function(comparer,arr)
      {
-      var f;
-      f=Runtime.Tupled(function(tupledArg)
+      return arr.sort(function(x,y)
       {
-       var x,y;
-       x=tupledArg[0];
-       y=tupledArg[1];
        return(comparer(x))(y);
       });
-      return arr.sort(f);
      },
      sortWith:function(comparer,arr)
      {
-      var f;
-      f=Runtime.Tupled(function(tupledArg)
+      return arr.slice().sort(function(x,y)
       {
-       var x,y;
-       x=tupledArg[0];
-       y=tupledArg[1];
        return(comparer(x))(y);
       });
-      return arr.slice().sort(f);
      },
      sub:function(arr,start,length)
      {
       Arrays.checkRange(arr,start,length);
       return arr.slice(start,start+length);
+     },
+     sub2D:function(src,src1,src2,len1,len2)
+     {
+      var len11,len21,dst,i,j;
+      len11=len1<0?0:len1;
+      len21=len2<0?0:len2;
+      dst=Arrays.zeroCreate2D(len11,len21);
+      for(i=0;i<=len11-1;i++){
+       for(j=0;j<=len21-1;j++){
+        Arrays.set2D(dst,i,j,Arrays.get2D(src,src1+i,src2+j));
+       }
+      }
+      return dst;
      },
      sum:function($arr)
      {
@@ -478,11 +537,11 @@
        $:0
       };
       i=0;
-      while(i<IntrinsicFunctionProxy.GetLength(arr)?res.$==0:false)
+      while(i<arr.length?res.$==0:false)
        {
-        f(IntrinsicFunctionProxy.GetArray(arr,i))?res={
+        f(Arrays.get(arr,i))?res={
          $:1,
-         $0:IntrinsicFunctionProxy.GetArray(arr,i)
+         $0:Arrays.get(arr,i)
         }:null;
         i=i+1;
        }
@@ -495,9 +554,9 @@
        $:0
       };
       i=0;
-      while(i<IntrinsicFunctionProxy.GetLength(arr)?res.$==0:false)
+      while(i<arr.length?res.$==0:false)
        {
-        f(IntrinsicFunctionProxy.GetArray(arr,i))?res={
+        f(Arrays.get(arr,i))?res={
          $:1,
          $0:i
         }:null;
@@ -512,9 +571,9 @@
        $:0
       };
       i=0;
-      while(i<IntrinsicFunctionProxy.GetLength(arr)?res.$==0:false)
+      while(i<arr.length?res.$==0:false)
        {
-        matchValue=f(IntrinsicFunctionProxy.GetArray(arr,i));
+        matchValue=f(Arrays.get(arr,i));
         matchValue.$==1?res=matchValue:null;
         i=i+1;
        }
@@ -525,8 +584,8 @@
       var x,y,i,patternInput,b,a;
       x=[];
       y=[];
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       patternInput=IntrinsicFunctionProxy.GetArray(arr,i);
+      for(i=0;i<=arr.length-1;i++){
+       patternInput=Arrays.get(arr,i);
        b=patternInput[1];
        a=patternInput[0];
        x.push(a);
@@ -540,8 +599,8 @@
       x=[];
       y=[];
       z=[];
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
-       matchValue=IntrinsicFunctionProxy.GetArray(arr,i);
+      for(i=0;i<=arr.length-1;i++){
+       matchValue=Arrays.get(arr,i);
        c=matchValue[2];
        b=matchValue[1];
        a=matchValue[0];
@@ -551,13 +610,23 @@
       }
       return[x,y,z];
      },
+     zeroCreate2D:function(n,m)
+     {
+      var arr;
+      arr=Arrays.init(n,function()
+      {
+       return Array(m);
+      });
+      arr.dims=2;
+      return arr;
+     },
      zip:function(arr1,arr2)
      {
       var res,i;
       Arrays.checkLength(arr1,arr2);
       res=Array(arr1.length);
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr1)-1;i++){
-       IntrinsicFunctionProxy.SetArray(res,i,[IntrinsicFunctionProxy.GetArray(arr1,i),IntrinsicFunctionProxy.GetArray(arr2,i)]);
+      for(i=0;i<=arr1.length-1;i++){
+       Arrays.set(res,i,[Arrays.get(arr1,i),Arrays.get(arr2,i)]);
       }
       return res;
      },
@@ -567,8 +636,8 @@
       Arrays.checkLength(arr1,arr2);
       Arrays.checkLength(arr2,arr3);
       res=Array(arr1.length);
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr1)-1;i++){
-       IntrinsicFunctionProxy.SetArray(res,i,[IntrinsicFunctionProxy.GetArray(arr1,i),IntrinsicFunctionProxy.GetArray(arr2,i),IntrinsicFunctionProxy.GetArray(arr3,i)]);
+      for(i=0;i<=arr1.length-1;i++){
+       Arrays.set(res,i,[Arrays.get(arr1,i),Arrays.get(arr2,i),Arrays.get(arr3,i)]);
       }
       return res;
      }
@@ -580,17 +649,17 @@
       {
        return function(j)
        {
-        return IntrinsicFunctionProxy.GetArray2D(array,i,j);
+        return Arrays.get2D(array,i,j);
        };
       });
      },
      init:function(n,m,f)
      {
       var array,i,j;
-      array=Arrays2D.zeroCreate(n,m);
+      array=Arrays.zeroCreate2D(n,m);
       for(i=0;i<=n-1;i++){
        for(j=0;j<=m-1;j++){
-        IntrinsicFunctionProxy.SetArray2D(array,i,j,(f(i))(j));
+        Arrays.set2D(array,i,j,(f(i))(j));
        }
       }
       return array;
@@ -602,7 +671,7 @@
       count2=array.length?array[0].length:0;
       for(i=0;i<=count1-1;i++){
        for(j=0;j<=count2-1;j++){
-        f(IntrinsicFunctionProxy.GetArray2D(array,i,j));
+        f(Arrays.get2D(array,i,j));
        }
       }
       return;
@@ -614,7 +683,7 @@
       count2=array.length?array[0].length:0;
       for(i=0;i<=count1-1;i++){
        for(j=0;j<=count2-1;j++){
-        ((f(i))(j))(IntrinsicFunctionProxy.GetArray2D(array,i,j));
+        ((f(i))(j))(Arrays.get2D(array,i,j));
        }
       }
       return;
@@ -625,7 +694,7 @@
       {
        return function(j)
        {
-        return f(IntrinsicFunctionProxy.GetArray2D(array,i,j));
+        return f(Arrays.get2D(array,i,j));
        };
       });
      },
@@ -635,13 +704,9 @@
       {
        return function(j)
        {
-        return((f(i))(j))(IntrinsicFunctionProxy.GetArray2D(array,i,j));
+        return((f(i))(j))(Arrays.get2D(array,i,j));
        };
       });
-     },
-     zeroCreate:function(n,m)
-     {
-      return IntrinsicFunctionProxy.Array2DZeroCreate(n,m);
      }
     },
     AsyncProxy:Runtime.Class({},{
@@ -682,7 +747,7 @@
         };
         array=this.r;
         errors=Arrays.choose(chooser,array);
-        _=IntrinsicFunctionProxy.GetLength(errors)>0?Operators.Raise(AggregateException.New(errors)):null;
+        _=Arrays.length(errors)>0?Operators.Raise(AggregateException.New(errors)):null;
        }
       else
        {
@@ -747,7 +812,11 @@
       return this.c;
      }
     },{
-     CreateLinkedTokenSource:function(tokens)
+     CreateLinkedTokenSource:function(t1,t2)
+     {
+      return CancellationTokenSource.CreateLinkedTokenSource1([t1,t2]);
+     },
+     CreateLinkedTokenSource1:function(tokens)
      {
       var cts,action;
       cts=CancellationTokenSource.New();
@@ -765,10 +834,6 @@
        return;
       };
       return Arrays.iter(action,tokens);
-     },
-     CreateLinkedTokenSource1:function(t1,t2)
-     {
-      return CancellationTokenSource.CreateLinkedTokenSource([t1,t2]);
      },
      New:function()
      {
@@ -1103,7 +1168,7 @@
      {
       var cs1,_,r;
       cs1=Arrays.ofSeq(cs);
-      if(IntrinsicFunctionProxy.GetLength(cs1)===0)
+      if(Arrays.length(cs1)===0)
        {
         _=Concurrency.Return([]);
        }
@@ -1134,7 +1199,7 @@
                if(matchValue[1].$==0)
                 {
                  x1=matchValue[1].$0;
-                 IntrinsicFunctionProxy.SetArray(a,i,x1);
+                 Arrays.set(a,i,x1);
                  o.contents=0;
                  _2=c.k.call(null,{
                   $:0,
@@ -1156,7 +1221,7 @@
                 {
                  x2=matchValue[1].$0;
                  n1=matchValue[0];
-                 IntrinsicFunctionProxy.SetArray(a,i,x2);
+                 Arrays.set(a,i,x2);
                  _3=void(o.contents=n1-1);
                 }
                else
@@ -1199,7 +1264,7 @@
       return{
        Dispose:function()
        {
-        return IntrinsicFunctionProxy.SetArray(ct.r,i,function()
+        return Arrays.set(ct.r,i,function()
         {
         });
        }
@@ -1632,9 +1697,9 @@
         {
          var i,_1,v,v1;
          i=e.s;
-         if(i<IntrinsicFunctionProxy.GetLength(x))
+         if(i<Arrays.length(x))
           {
-           v=IntrinsicFunctionProxy.GetArray(x,i);
+           v=Arrays.get(x,i);
            e.c=v;
            v1=i+1;
            e.s=v1;
@@ -1701,20 +1766,6 @@
       }
      })
     },
-    ExtraTopLevelOperatorsProxy:{
-     array2D:function(rows)
-     {
-      var mapping,source1,x;
-      mapping=function(source)
-      {
-       return Arrays.ofSeq(source);
-      };
-      source1=Seq.map(mapping,rows);
-      x=Arrays.ofSeq(source1);
-      x.dims=2;
-      return x;
-     }
-    },
     Guid:Runtime.Class({},{
      NewGuid:function()
      {
@@ -1737,11 +1788,10 @@
           meta=document.getElementById("websharper-data");
           _=meta?jQuery(document).ready(function()
           {
-           var text,obj,x,action;
+           var text,obj,action,array;
            text=meta.getAttribute("content");
            obj=Json.Activate(JSON.parse(text));
-           x=JSModule.GetFields(obj);
-           action=Runtime.Tupled(function(tupledArg)
+           action=function(tupledArg)
            {
             var k,v,p,old;
             k=tupledArg[0];
@@ -1749,8 +1799,9 @@
             p=v.get_Body();
             old=document.getElementById(k);
             return p.ReplaceInDom(old);
-           });
-           return Arrays.iter(action,x);
+           };
+           array=JSModule.GetFields(obj);
+           return Arrays.iter(action,array);
           }):null;
          }
         else
@@ -1787,94 +1838,6 @@
         }
        })
       }
-     }
-    },
-    IntrinsicFunctionProxy:{
-     Array2DZeroCreate:function(n,m)
-     {
-      var arr;
-      arr=Arrays.init(n,function()
-      {
-       return Array(m);
-      });
-      arr.dims=2;
-      return arr;
-     },
-     BoundsCheck:function(arr,n)
-     {
-      return(n<0?true:n>=IntrinsicFunctionProxy.GetLength(arr))?Operators.Raise(new Error("IndexOutOfRangeException")):null;
-     },
-     BoundsCheck2D:function(arr,n1,n2)
-     {
-      return(((n1<0?true:n2<0)?true:n1>=arr.length)?true:n2>=(arr.length?arr[0].length:0))?Operators.Raise(new Error("IndexOutOfRangeException")):null;
-     },
-     GetArray:function(arr,n)
-     {
-      IntrinsicFunctionProxy.BoundsCheck(arr,n);
-      return arr[n];
-     },
-     GetArray2D:function(arr,n1,n2)
-     {
-      IntrinsicFunctionProxy.BoundsCheck2D(arr,n1,n2);
-      return arr[n1][n2];
-     },
-     GetArray2DSub:function(src,src1,src2,len1,len2)
-     {
-      var len11,len21,dst,i,j;
-      len11=len1<0?0:len1;
-      len21=len2<0?0:len2;
-      dst=IntrinsicFunctionProxy.Array2DZeroCreate(len11,len21);
-      for(i=0;i<=len11-1;i++){
-       for(j=0;j<=len21-1;j++){
-        IntrinsicFunctionProxy.SetArray2D(dst,i,j,IntrinsicFunctionProxy.GetArray2D(src,src1+i,src2+j));
-       }
-      }
-      return dst;
-     },
-     GetArraySub:function(arr,start,len)
-     {
-      var dst,i;
-      dst=Array(len);
-      for(i=0;i<=len-1;i++){
-       IntrinsicFunctionProxy.SetArray(dst,i,IntrinsicFunctionProxy.GetArray(arr,start+1));
-      }
-      return dst;
-     },
-     GetLength:function(arr)
-     {
-      var matchValue;
-      matchValue=arr.dims;
-      return matchValue===2?arr.length*arr.length:arr.length;
-     },
-     SetArray:function(arr,n,x)
-     {
-      IntrinsicFunctionProxy.BoundsCheck(arr,n);
-      arr[n]=x;
-      return;
-     },
-     SetArray2D:function(arr,n1,n2,x)
-     {
-      IntrinsicFunctionProxy.BoundsCheck2D(arr,n1,n2);
-      arr[n1][n2]=x;
-      return;
-     },
-     SetArray2DSub:function(dst,src1,src2,len1,len2,src)
-     {
-      var i,j;
-      for(i=0;i<=len1-1;i++){
-       for(j=0;j<=len2-1;j++){
-        IntrinsicFunctionProxy.SetArray2D(dst,src1+i,src2+j,IntrinsicFunctionProxy.GetArray2D(src,i,j));
-       }
-      }
-      return;
-     },
-     SetArraySub:function(arr,start,len,src)
-     {
-      var i;
-      for(i=0;i<=len-1;i++){
-       IntrinsicFunctionProxy.SetArray(arr,start+i,IntrinsicFunctionProxy.GetArray(src,i));
-      }
-      return;
      }
     },
     JavaScript:{
@@ -1948,8 +1911,8 @@
      {
       var types,i,decode;
       types=json.$TYPES;
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(types)-1;i++){
-       IntrinsicFunctionProxy.SetArray(types,i,Json.lookup(IntrinsicFunctionProxy.GetArray(types,i)));
+      for(i=0;i<=Arrays.length(types)-1;i++){
+       Arrays.set(types,i,Json.lookup(Arrays.get(types,i)));
       }
       decode=function(x)
       {
@@ -1971,7 +1934,7 @@
             {
              o=Json.shallowMap(decode,x.$V);
              ti=x.$T;
-             _2=Unchecked.Equals(typeof ti,"undefined")?o:Json.restore(IntrinsicFunctionProxy.GetArray(types,ti),o);
+             _2=Unchecked.Equals(typeof ti,"undefined")?o:Json.restore(Arrays.get(types,ti),o);
             }
            _1=_2;
           }
@@ -1988,12 +1951,12 @@
      lookup:function(x)
      {
       var k,r,i,n,rn,_;
-      k=IntrinsicFunctionProxy.GetLength(x);
+      k=Arrays.length(x);
       r=Global;
       i=0;
       while(i<k)
        {
-        n=IntrinsicFunctionProxy.GetArray(x,i);
+        n=Arrays.get(x,i);
         rn=r[n];
         if(!Unchecked.Equals(typeof rn,undefined))
          {
@@ -2283,10 +2246,10 @@
       r=Runtime.New(T1,{
        $:0
       });
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(arr)-1;i++){
+      for(i=0;i<=Arrays.length(arr)-1;i++){
        r=Runtime.New(T1,{
         $:1,
-        $0:IntrinsicFunctionProxy.GetArray(arr,IntrinsicFunctionProxy.GetLength(arr)-i-1),
+        $0:Arrays.get(arr,Arrays.length(arr)-i-1),
         $1:r
        });
       }
@@ -2420,311 +2383,6 @@
      zip3:function(l1,l2,l3)
      {
       return List.ofArray(Arrays.zip3(Arrays.ofSeq(l1),Arrays.ofSeq(l2),Arrays.ofSeq(l3)));
-     }
-    },
-    OperatorIntrinsics:{
-     GetArraySlice:function(source,start,finish)
-     {
-      var matchValue,_,_1,f,_2,s,f1,s1;
-      matchValue=[start,finish];
-      if(matchValue[0].$==0)
-       {
-        if(matchValue[1].$==1)
-         {
-          f=matchValue[1].$0;
-          _1=source.slice(0,f+1);
-         }
-        else
-         {
-          _1=[];
-         }
-        _=_1;
-       }
-      else
-       {
-        if(matchValue[1].$==0)
-         {
-          s=matchValue[0].$0;
-          _2=source.slice(s);
-         }
-        else
-         {
-          f1=matchValue[1].$0;
-          s1=matchValue[0].$0;
-          _2=source.slice(s1,f1+1);
-         }
-        _=_2;
-       }
-      return _;
-     },
-     GetArraySlice2D:function(arr,start1,finish1,start2,finish2)
-     {
-      var start11,_,n,start21,_1,n1,finish11,_2,n2,finish21,_3,n3,len1,len2;
-      if(start1.$==1)
-       {
-        n=start1.$0;
-        _=n;
-       }
-      else
-       {
-        _=0;
-       }
-      start11=_;
-      if(start2.$==1)
-       {
-        n1=start2.$0;
-        _1=n1;
-       }
-      else
-       {
-        _1=0;
-       }
-      start21=_1;
-      if(finish1.$==1)
-       {
-        n2=finish1.$0;
-        _2=n2;
-       }
-      else
-       {
-        _2=arr.length-1;
-       }
-      finish11=_2;
-      if(finish2.$==1)
-       {
-        n3=finish2.$0;
-        _3=n3;
-       }
-      else
-       {
-        _3=(arr.length?arr[0].length:0)-1;
-       }
-      finish21=_3;
-      len1=finish11-start11+1;
-      len2=finish21-start21+1;
-      return IntrinsicFunctionProxy.GetArray2DSub(arr,start11,start21,len1,len2);
-     },
-     GetArraySlice2DFixed1:function(arr,fixed1,start2,finish2)
-     {
-      var start21,_,n,finish21,_1,n1,len2,dst,j;
-      if(start2.$==1)
-       {
-        n=start2.$0;
-        _=n;
-       }
-      else
-       {
-        _=0;
-       }
-      start21=_;
-      if(finish2.$==1)
-       {
-        n1=finish2.$0;
-        _1=n1;
-       }
-      else
-       {
-        _1=(arr.length?arr[0].length:0)-1;
-       }
-      finish21=_1;
-      len2=finish21-start21+1;
-      dst=Array(len2);
-      for(j=0;j<=len2-1;j++){
-       IntrinsicFunctionProxy.SetArray(dst,j,IntrinsicFunctionProxy.GetArray2D(arr,fixed1,start21+j));
-      }
-      return dst;
-     },
-     GetArraySlice2DFixed2:function(arr,start1,finish1,fixed2)
-     {
-      var start11,_,n,finish11,_1,n1,len1,dst,i;
-      if(start1.$==1)
-       {
-        n=start1.$0;
-        _=n;
-       }
-      else
-       {
-        _=0;
-       }
-      start11=_;
-      if(finish1.$==1)
-       {
-        n1=finish1.$0;
-        _1=n1;
-       }
-      else
-       {
-        _1=arr.length-1;
-       }
-      finish11=_1;
-      len1=finish11-start11+1;
-      dst=Array(len1);
-      for(i=0;i<=len1-1;i++){
-       IntrinsicFunctionProxy.SetArray(dst,i,IntrinsicFunctionProxy.GetArray2D(arr,start11+i,fixed2));
-      }
-      return dst;
-     },
-     GetStringSlice:function(source,start,finish)
-     {
-      var matchValue,_,_1,f,_2,s,f1,s1;
-      matchValue=[start,finish];
-      if(matchValue[0].$==0)
-       {
-        if(matchValue[1].$==1)
-         {
-          f=matchValue[1].$0;
-          _1=source.slice(0,f+1);
-         }
-        else
-         {
-          _1="";
-         }
-        _=_1;
-       }
-      else
-       {
-        if(matchValue[1].$==0)
-         {
-          s=matchValue[0].$0;
-          _2=source.slice(s);
-         }
-        else
-         {
-          f1=matchValue[1].$0;
-          s1=matchValue[0].$0;
-          _2=source.slice(s1,f1+1);
-         }
-        _=_2;
-       }
-      return _;
-     },
-     SetArraySlice:function(dst,start,finish,src)
-     {
-      var start1,_,n,finish1,_1,n1;
-      if(start.$==1)
-       {
-        n=start.$0;
-        _=n;
-       }
-      else
-       {
-        _=0;
-       }
-      start1=_;
-      if(finish.$==1)
-       {
-        n1=finish.$0;
-        _1=n1;
-       }
-      else
-       {
-        _1=IntrinsicFunctionProxy.GetLength(dst)-1;
-       }
-      finish1=_1;
-      return IntrinsicFunctionProxy.SetArraySub(dst,start1,finish1-start1+1,src);
-     },
-     SetArraySlice2D:function(dst,start1,finish1,start2,finish2,src)
-     {
-      var start11,_,n,start21,_1,n1,finish11,_2,n2,finish21,_3,n3;
-      if(start1.$==1)
-       {
-        n=start1.$0;
-        _=n;
-       }
-      else
-       {
-        _=0;
-       }
-      start11=_;
-      if(start2.$==1)
-       {
-        n1=start2.$0;
-        _1=n1;
-       }
-      else
-       {
-        _1=0;
-       }
-      start21=_1;
-      if(finish1.$==1)
-       {
-        n2=finish1.$0;
-        _2=n2;
-       }
-      else
-       {
-        _2=dst.length-1;
-       }
-      finish11=_2;
-      if(finish2.$==1)
-       {
-        n3=finish2.$0;
-        _3=n3;
-       }
-      else
-       {
-        _3=(dst.length?dst[0].length:0)-1;
-       }
-      finish21=_3;
-      return IntrinsicFunctionProxy.SetArray2DSub(dst,start11,start21,finish11-start11+1,finish21-start21+1,src);
-     },
-     SetArraySlice2DFixed1:function(dst,fixed1,start2,finish2,src)
-     {
-      var start21,_,n,finish21,_1,n1,len2,j;
-      if(start2.$==1)
-       {
-        n=start2.$0;
-        _=n;
-       }
-      else
-       {
-        _=0;
-       }
-      start21=_;
-      if(finish2.$==1)
-       {
-        n1=finish2.$0;
-        _1=n1;
-       }
-      else
-       {
-        _1=(dst.length?dst[0].length:0)-1;
-       }
-      finish21=_1;
-      len2=finish21-start21+1;
-      for(j=0;j<=len2-1;j++){
-       IntrinsicFunctionProxy.SetArray2D(dst,fixed1,start21+j,IntrinsicFunctionProxy.GetArray(src,j));
-      }
-      return;
-     },
-     SetArraySlice2DFixed2:function(dst,start1,finish1,fixed2,src)
-     {
-      var start11,_,n,finish11,_1,n1,len1,i;
-      if(start1.$==1)
-       {
-        n=start1.$0;
-        _=n;
-       }
-      else
-       {
-        _=0;
-       }
-      start11=_;
-      if(finish1.$==1)
-       {
-        n1=finish1.$0;
-        _1=n1;
-       }
-      else
-       {
-        _1=dst.length-1;
-       }
-      finish11=_1;
-      len1=finish11-start11+1;
-      for(i=0;i<=len1-1;i++){
-       IntrinsicFunctionProxy.SetArray2D(dst,start11+i,fixed2,IntrinsicFunctionProxy.GetArray(src,i));
-      }
-      return;
      }
     },
     Operators:{
@@ -2987,7 +2645,7 @@
      padNumLeft:function(s,l)
      {
       var f,_,_this,i;
-      f=IntrinsicFunctionProxy.GetArray(s,0);
+      f=Arrays.get(s,0);
       if((f===" "?true:f==="+")?true:f==="-")
        {
         _this=s.substr(1);
@@ -3013,19 +2671,19 @@
       var printObject,t,_1,_2,_3,mapping1,strings1;
       printObject=function(o1)
       {
-       var s,_,x,mapping,strings;
+       var s,_,mapping,array,strings;
        s=Global.String(o1);
        if(s==="[object Object]")
         {
-         x=JSModule.GetFields(o1);
-         mapping=Runtime.Tupled(function(tupledArg)
+         mapping=function(tupledArg)
          {
           var k,v;
           k=tupledArg[0];
           v=tupledArg[1];
           return k+" = "+PrintfHelpers.prettyPrint(v);
-         });
-         strings=Arrays.map(mapping,x);
+         };
+         array=JSModule.GetFields(o1);
+         strings=Arrays.map(mapping,array);
          _="{"+Strings.concat("; ",strings)+"}";
         }
        else
@@ -3086,7 +2744,7 @@
         {
          return Seq.map(function(j)
          {
-          return p(IntrinsicFunctionProxy.GetArray2D(o,i,j));
+          return p(Arrays.get2D(o,i,j));
          },Operators.range(0,l2-1));
         });
         return Strings.concat("; ",strings1);
@@ -3112,7 +2770,7 @@
     Queue:{
      Clear:function(a)
      {
-      return a.splice(0,IntrinsicFunctionProxy.GetLength(a));
+      return a.splice(0,Arrays.length(a));
      },
      Contains:function(a,el)
      {
@@ -3123,7 +2781,7 @@
      },
      CopyTo:function(a,array,index)
      {
-      return Arrays.blit(a,0,array,index,IntrinsicFunctionProxy.GetLength(a));
+      return Arrays.blit(a,0,array,index,Arrays.length(a));
      }
     },
     Random:Runtime.Class({
@@ -3152,8 +2810,8 @@
      NextBytes:function(buffer)
      {
       var i;
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(buffer)-1;i++){
-       IntrinsicFunctionProxy.SetArray(buffer,i,Math.floor(Math.random()*256));
+      for(i=0;i<=Arrays.length(buffer)-1;i++){
+       Arrays.set(buffer,i,Math.floor(Math.random()*256));
       }
       return;
      }
@@ -3181,7 +2839,7 @@
         f1=function(_arg1)
         {
          var callback,x2;
-         callback=Runtime.Tupled(function(tupledArg)
+         callback=function(tupledArg)
          {
           var ok,err,cc,waiting,callback1,reg,ok1,err1,arg00;
           ok=tupledArg[0];
@@ -3240,7 +2898,7 @@
           };
           arg00=Remoting.EndPoint();
           return Remoting.AjaxProvider().Async(arg00,headers,payload,ok1,err1);
-         });
+         };
          x2=Concurrency.FromContinuations(callback);
          return x2;
         };
@@ -3330,8 +2988,11 @@
      {
       var $0=this,$this=this;
       var xhr=new Global.XMLHttpRequest();
-      xhr.withCredentials=true;
       xhr.open("POST",$url,$async);
+      if($async==true)
+       {
+        xhr.withCredentials=true;
+       }
       for(var h in $headers){
        xhr.setRequestHeader(h,$headers[h]);
       }
@@ -3424,7 +3085,7 @@
      average:function(s)
      {
       var patternInput,sum,count;
-      patternInput=Seq.fold(Runtime.Tupled(function(tupledArg)
+      patternInput=Seq.fold(function(tupledArg)
       {
        var n,s1;
        n=tupledArg[0];
@@ -3433,7 +3094,7 @@
        {
         return[n+1,s1+x];
        };
-      }),[0,0],s);
+      },[0,0],s);
       sum=patternInput[1];
       count=patternInput[0];
       return sum/count;
@@ -3441,7 +3102,7 @@
      averageBy:function(f,s)
      {
       var patternInput,sum,count;
-      patternInput=Seq.fold(Runtime.Tupled(function(tupledArg)
+      patternInput=Seq.fold(function(tupledArg)
       {
        var n,s1;
        n=tupledArg[0];
@@ -3450,7 +3111,7 @@
        {
         return[n+1,s1+f(x)];
        };
-      }),[0,0],s);
+      },[0,0],s);
       sum=patternInput[1];
       count=patternInput[0];
       return sum/count;
@@ -4124,7 +3785,7 @@
       var mapping,source;
       mapping=function(x)
       {
-       return[IntrinsicFunctionProxy.GetArray(x,0),IntrinsicFunctionProxy.GetArray(x,1)];
+       return[Arrays.get(x,0),Arrays.get(x,1)];
       };
       source=Seq.windowed(2,s);
       return Seq.map(mapping,source);
@@ -4505,20 +4166,325 @@
      {
       return Seq.mapi2(function(x)
       {
-       return Runtime.Tupled(function(tupledArg)
+       return function(tupledArg)
        {
         var y,z;
         y=tupledArg[0];
         z=tupledArg[1];
         return[x,y,z];
-       });
+       };
       },s1,Seq.zip(s2,s3));
+     }
+    },
+    Slice:{
+     array:function(source,start,finish)
+     {
+      var matchValue,_,_1,f,_2,s,f1,s1;
+      matchValue=[start,finish];
+      if(matchValue[0].$==0)
+       {
+        if(matchValue[1].$==1)
+         {
+          f=matchValue[1].$0;
+          _1=source.slice(0,f+1);
+         }
+        else
+         {
+          _1=[];
+         }
+        _=_1;
+       }
+      else
+       {
+        if(matchValue[1].$==0)
+         {
+          s=matchValue[0].$0;
+          _2=source.slice(s);
+         }
+        else
+         {
+          f1=matchValue[1].$0;
+          s1=matchValue[0].$0;
+          _2=source.slice(s1,f1+1);
+         }
+        _=_2;
+       }
+      return _;
+     },
+     array2D:function(arr,start1,finish1,start2,finish2)
+     {
+      var start11,_,n,start21,_1,n1,finish11,_2,n2,finish21,_3,n3,len1,len2;
+      if(start1.$==1)
+       {
+        n=start1.$0;
+        _=n;
+       }
+      else
+       {
+        _=0;
+       }
+      start11=_;
+      if(start2.$==1)
+       {
+        n1=start2.$0;
+        _1=n1;
+       }
+      else
+       {
+        _1=0;
+       }
+      start21=_1;
+      if(finish1.$==1)
+       {
+        n2=finish1.$0;
+        _2=n2;
+       }
+      else
+       {
+        _2=arr.length-1;
+       }
+      finish11=_2;
+      if(finish2.$==1)
+       {
+        n3=finish2.$0;
+        _3=n3;
+       }
+      else
+       {
+        _3=(arr.length?arr[0].length:0)-1;
+       }
+      finish21=_3;
+      len1=finish11-start11+1;
+      len2=finish21-start21+1;
+      return Arrays.sub2D(arr,start11,start21,len1,len2);
+     },
+     array2Dfix1:function(arr,fixed1,start2,finish2)
+     {
+      var start21,_,n,finish21,_1,n1,len2,dst,j;
+      if(start2.$==1)
+       {
+        n=start2.$0;
+        _=n;
+       }
+      else
+       {
+        _=0;
+       }
+      start21=_;
+      if(finish2.$==1)
+       {
+        n1=finish2.$0;
+        _1=n1;
+       }
+      else
+       {
+        _1=(arr.length?arr[0].length:0)-1;
+       }
+      finish21=_1;
+      len2=finish21-start21+1;
+      dst=Array(len2);
+      for(j=0;j<=len2-1;j++){
+       Arrays.set(dst,j,Arrays.get2D(arr,fixed1,start21+j));
+      }
+      return dst;
+     },
+     array2Dfix2:function(arr,start1,finish1,fixed2)
+     {
+      var start11,_,n,finish11,_1,n1,len1,dst,i;
+      if(start1.$==1)
+       {
+        n=start1.$0;
+        _=n;
+       }
+      else
+       {
+        _=0;
+       }
+      start11=_;
+      if(finish1.$==1)
+       {
+        n1=finish1.$0;
+        _1=n1;
+       }
+      else
+       {
+        _1=arr.length-1;
+       }
+      finish11=_1;
+      len1=finish11-start11+1;
+      dst=Array(len1);
+      for(i=0;i<=len1-1;i++){
+       Arrays.set(dst,i,Arrays.get2D(arr,start11+i,fixed2));
+      }
+      return dst;
+     },
+     setArray:function(dst,start,finish,src)
+     {
+      var start1,_,n,finish1,_1,n1;
+      if(start.$==1)
+       {
+        n=start.$0;
+        _=n;
+       }
+      else
+       {
+        _=0;
+       }
+      start1=_;
+      if(finish.$==1)
+       {
+        n1=finish.$0;
+        _1=n1;
+       }
+      else
+       {
+        _1=dst.length-1;
+       }
+      finish1=_1;
+      return Arrays.setSub(dst,start1,finish1-start1+1,src);
+     },
+     setArray2D:function(dst,start1,finish1,start2,finish2,src)
+     {
+      var start11,_,n,start21,_1,n1,finish11,_2,n2,finish21,_3,n3;
+      if(start1.$==1)
+       {
+        n=start1.$0;
+        _=n;
+       }
+      else
+       {
+        _=0;
+       }
+      start11=_;
+      if(start2.$==1)
+       {
+        n1=start2.$0;
+        _1=n1;
+       }
+      else
+       {
+        _1=0;
+       }
+      start21=_1;
+      if(finish1.$==1)
+       {
+        n2=finish1.$0;
+        _2=n2;
+       }
+      else
+       {
+        _2=dst.length-1;
+       }
+      finish11=_2;
+      if(finish2.$==1)
+       {
+        n3=finish2.$0;
+        _3=n3;
+       }
+      else
+       {
+        _3=(dst.length?dst[0].length:0)-1;
+       }
+      finish21=_3;
+      return Arrays.setSub2D(dst,start11,start21,finish11-start11+1,finish21-start21+1,src);
+     },
+     setArray2Dfix1:function(dst,fixed1,start2,finish2,src)
+     {
+      var start21,_,n,finish21,_1,n1,len2,j;
+      if(start2.$==1)
+       {
+        n=start2.$0;
+        _=n;
+       }
+      else
+       {
+        _=0;
+       }
+      start21=_;
+      if(finish2.$==1)
+       {
+        n1=finish2.$0;
+        _1=n1;
+       }
+      else
+       {
+        _1=(dst.length?dst[0].length:0)-1;
+       }
+      finish21=_1;
+      len2=finish21-start21+1;
+      for(j=0;j<=len2-1;j++){
+       Arrays.set2D(dst,fixed1,start21+j,Arrays.get(src,j));
+      }
+      return;
+     },
+     setArray2Dfix2:function(dst,start1,finish1,fixed2,src)
+     {
+      var start11,_,n,finish11,_1,n1,len1,i;
+      if(start1.$==1)
+       {
+        n=start1.$0;
+        _=n;
+       }
+      else
+       {
+        _=0;
+       }
+      start11=_;
+      if(finish1.$==1)
+       {
+        n1=finish1.$0;
+        _1=n1;
+       }
+      else
+       {
+        _1=dst.length-1;
+       }
+      finish11=_1;
+      len1=finish11-start11+1;
+      for(i=0;i<=len1-1;i++){
+       Arrays.set2D(dst,start11+i,fixed2,Arrays.get(src,i));
+      }
+      return;
+     },
+     string:function(source,start,finish)
+     {
+      var matchValue,_,_1,f,_2,s,f1,s1;
+      matchValue=[start,finish];
+      if(matchValue[0].$==0)
+       {
+        if(matchValue[1].$==1)
+         {
+          f=matchValue[1].$0;
+          _1=source.slice(0,f+1);
+         }
+        else
+         {
+          _1="";
+         }
+        _=_1;
+       }
+      else
+       {
+        if(matchValue[1].$==0)
+         {
+          s=matchValue[0].$0;
+          _2=source.slice(s);
+         }
+        else
+         {
+          f1=matchValue[1].$0;
+          s1=matchValue[0].$0;
+          _2=source.slice(s1,f1+1);
+         }
+        _=_2;
+       }
+      return _;
      }
     },
     Stack:{
      Clear:function(stack)
      {
-      return stack.splice(0,IntrinsicFunctionProxy.GetLength(stack));
+      return stack.splice(0,Arrays.length(stack));
      },
      Contains:function(stack,el)
      {
@@ -4529,7 +4495,7 @@
      },
      CopyTo:function(stack,array,index)
      {
-      return Arrays.blit(array,0,array,index,IntrinsicFunctionProxy.GetLength(stack));
+      return Arrays.blit(array,0,array,index,Arrays.length(stack));
      }
     },
     Strings:{
@@ -4809,13 +4775,13 @@
      arrayEquals:function(a,b)
      {
       var _,eq,i;
-      if(IntrinsicFunctionProxy.GetLength(a)===IntrinsicFunctionProxy.GetLength(b))
+      if(Arrays.length(a)===Arrays.length(b))
        {
         eq=true;
         i=0;
-        while(eq?i<IntrinsicFunctionProxy.GetLength(a):false)
+        while(eq?i<Arrays.length(a):false)
          {
-          !Unchecked.Equals(IntrinsicFunctionProxy.GetArray(a,i),IntrinsicFunctionProxy.GetArray(b,i))?eq=false:null;
+          !Unchecked.Equals(Arrays.get(a,i),Arrays.get(b,i))?eq=false:null;
           i=i+1;
          }
         _=eq;
@@ -4829,13 +4795,13 @@
      compareArrays:function(a,b)
      {
       var _,_1,cmp,i;
-      if(IntrinsicFunctionProxy.GetLength(a)<IntrinsicFunctionProxy.GetLength(b))
+      if(Arrays.length(a)<Arrays.length(b))
        {
         _=-1;
        }
       else
        {
-        if(IntrinsicFunctionProxy.GetLength(a)>IntrinsicFunctionProxy.GetLength(b))
+        if(Arrays.length(a)>Arrays.length(b))
          {
           _1=1;
          }
@@ -4843,9 +4809,9 @@
          {
           cmp=0;
           i=0;
-          while(cmp===0?i<IntrinsicFunctionProxy.GetLength(a):false)
+          while(cmp===0?i<Arrays.length(a):false)
            {
-            cmp=Unchecked.Compare(IntrinsicFunctionProxy.GetArray(a,i),IntrinsicFunctionProxy.GetArray(b,i));
+            cmp=Unchecked.Compare(Arrays.get(a,i),Arrays.get(b,i));
             i=i+1;
            }
           _1=cmp;
@@ -4866,8 +4832,8 @@
      {
       var h,i;
       h=-34948909;
-      for(i=0;i<=IntrinsicFunctionProxy.GetLength(o)-1;i++){
-       h=Unchecked.hashMix(h,Unchecked.Hash(IntrinsicFunctionProxy.GetArray(o,i)));
+      for(i=0;i<=Arrays.length(o)-1;i++){
+       h=Unchecked.hashMix(h,Unchecked.Hash(Arrays.get(o,i)));
       }
       return h;
      },
@@ -4945,11 +4911,11 @@
  });
  Runtime.OnInit(function()
  {
+  Number=Runtime.Safe(Global.Number);
   WebSharper=Runtime.Safe(Global.IntelliFactory.WebSharper);
   Arrays=Runtime.Safe(WebSharper.Arrays);
   Operators=Runtime.Safe(WebSharper.Operators);
-  Number=Runtime.Safe(Global.Number);
-  IntrinsicFunctionProxy=Runtime.Safe(WebSharper.IntrinsicFunctionProxy);
+  Error=Runtime.Safe(Global.Error);
   Array=Runtime.Safe(Global.Array);
   Seq=Runtime.Safe(WebSharper.Seq);
   Unchecked=Runtime.Safe(WebSharper.Unchecked);
@@ -4964,7 +4930,6 @@
   Char=Runtime.Safe(WebSharper.Char);
   Util=Runtime.Safe(WebSharper.Util);
   Lazy=Runtime.Safe(WebSharper.Lazy);
-  Error=Runtime.Safe(Global.Error);
   Date=Runtime.Safe(Global.Date);
   console=Runtime.Safe(Global.console);
   Scheduler=Runtime.Safe(Concurrency.Scheduler);

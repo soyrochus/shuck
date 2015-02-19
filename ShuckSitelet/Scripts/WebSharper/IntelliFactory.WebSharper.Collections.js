@@ -1,6 +1,6 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,Collections,BalancedTree,Operators,IntrinsicFunctionProxy,Seq,List,T,Arrays,JavaScript,JSModule,Enumerator,DictionaryUtil,Dictionary,Unchecked,FSharpMap,Pair,Option,MapUtil,FSharpSet,SetModule,SetUtil,Array,HashSet,HashSetUtil,HashSet1,LinkedList,EnumeratorProxy,ListProxy,ResizeArray,ResizeArrayProxy;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,WebSharper,Collections,BalancedTree,Operators,Arrays,Seq,List,T,JavaScript,JSModule,Enumerator,DictionaryUtil,Dictionary,Unchecked,FSharpMap,Pair,Option,MapUtil,FSharpSet,SetModule,SetUtil,Array,HashSet,HashSetUtil,HashSet1,LinkedList,EnumeratorProxy,ListProxy,ResizeArray,ResizeArrayProxy;
  Runtime.Define(Global,{
   IntelliFactory:{
    WebSharper:{
@@ -39,7 +39,7 @@
          center=(min+max)/2>>0;
          left=BalancedTree.Build(data,min,center-1);
          right=BalancedTree.Build(data,center+1,max);
-         _=BalancedTree.Branch(IntrinsicFunctionProxy.GetArray(data,center),left,right);
+         _=BalancedTree.Branch(Arrays.get(data,center),left,right);
         }
        return _;
       },
@@ -50,7 +50,7 @@
       Enumerate:function(flip,t)
       {
        var gen;
-       gen=Runtime.Tupled(function(tupledArg)
+       gen=function(tupledArg)
        {
         var t1,spine,_,_1,t2,spine1,other;
         t1=tupledArg[0];
@@ -88,7 +88,7 @@
           })]);
          }
         return _;
-       });
+       };
        return Seq.unfold(gen,[t,Runtime.New(T,{
         $:0
        })]);
@@ -152,8 +152,8 @@
         return x==null?0:x.Height;
        };
        t1=t;
-       for(i=0;i<=IntrinsicFunctionProxy.GetLength(spine)-1;i++){
-        matchValue=IntrinsicFunctionProxy.GetArray(spine,i);
+       for(i=0;i<=Arrays.length(spine)-1;i++){
+        matchValue=Arrays.get(spine,i);
         if(matchValue[0])
          {
           x1=matchValue[1];
@@ -673,7 +673,7 @@
        },
        Clear:function()
        {
-        this.data=Array.prototype.constructor.apply(undefined,[].concat([]));
+        this.data=Array.prototype.constructor.apply(Array,[]);
         this.count=0;
         return;
        },
@@ -689,7 +689,7 @@
         i=0;
         all=HashSetUtil.concat(this.data);
         for(i1=0;i1<=all.length-1;i1++){
-         IntrinsicFunctionProxy.SetArray(arr,i1,all[i1]);
+         Arrays.set(arr,i1,all[i1]);
         }
         return;
        },
@@ -734,13 +734,13 @@
        {
         var other;
         other=Arrays.ofSeq(xs);
-        return this.count<IntrinsicFunctionProxy.GetLength(other)?this.IsSubsetOf(other):false;
+        return this.count<Arrays.length(other)?this.IsSubsetOf(other):false;
        },
        IsProperSupersetOf:function(xs)
        {
         var other;
         other=Arrays.ofSeq(xs);
-        return this.count>IntrinsicFunctionProxy.GetLength(other)?this.IsSupersetOf(other):false;
+        return this.count>Arrays.length(other)?this.IsSupersetOf(other):false;
        },
        IsSubsetOf:function(xs)
        {
@@ -852,7 +852,7 @@
        },
        add:function(item)
        {
-        var h,arr,_,_1,ps,value;
+        var h,arr,_,_1,value;
         h=this.hash.call(null,item);
         arr=this.data[h];
         if(arr==null)
@@ -869,8 +869,7 @@
            }
           else
            {
-            ps=[item];
-            value=arr.push.apply(arr,[].concat(ps));
+            value=arr.push(item);
             this.count=this.count+1;
             _1=true;
            }
@@ -975,7 +974,7 @@
         r=Runtime.New(this,{});
         r.equals=equals;
         r.hash=hash;
-        r.data=Array.prototype.constructor.apply(undefined,[].concat([]));
+        r.data=Array.prototype.constructor.apply(Array,[]);
         r.count=0;
         enumerator=Enumerator.Get(init);
         while(enumerator.MoveNext())
@@ -1362,7 +1361,7 @@
       OfArray:function(a)
       {
        var mapping,data,t;
-       mapping=Runtime.Tupled(function(tupledArg)
+       mapping=function(tupledArg)
        {
         var k,v;
         k=tupledArg[0];
@@ -1371,7 +1370,7 @@
          Key:k,
          Value:v
         });
-       });
+       };
        data=Seq.map(mapping,a);
        t=BalancedTree.OfSeq(data);
        return FSharpMap.New1(t);
@@ -1446,7 +1445,7 @@
        var a;
        a=Seq.toArray(Seq.delay(function()
        {
-        return Seq.collect(Runtime.Tupled(function(matchValue)
+        return Seq.collect(function(matchValue)
         {
          var v,k;
          v=matchValue[1];
@@ -1455,10 +1454,10 @@
           Key:k,
           Value:v
          })];
-        }),Seq.distinctBy(Runtime.Tupled(function(tuple)
+        },Seq.distinctBy(function(tuple)
         {
          return tuple[0];
-        }),s));
+        },s));
        }));
        Arrays.sortInPlace(a);
        return BalancedTree.Build(a,0,a.length-1);
@@ -1498,7 +1497,7 @@
        {
         var value,_this;
         _this=this.arr;
-        value=ResizeArray.splice(this.arr,0,IntrinsicFunctionProxy.GetLength(_this),[]);
+        value=ResizeArray.splice(this.arr,0,Arrays.length(_this),[]);
         return;
        },
        CopyTo:function(arr)
@@ -1521,7 +1520,9 @@
        },
        GetRange:function(index,count)
        {
-        return ResizeArrayProxy.New(Arrays.sub(this.arr,index,count));
+        var arr;
+        arr=this.arr;
+        return ResizeArrayProxy.New(Arrays.sub(arr,index,count));
        },
        Insert:function(index,items)
        {
@@ -1563,15 +1564,15 @@
        {
         var _this;
         _this=this.arr;
-        return IntrinsicFunctionProxy.GetLength(_this);
+        return Arrays.length(_this);
        },
        get_Item:function(x)
        {
-        return IntrinsicFunctionProxy.GetArray(this.arr,x);
+        return Arrays.get(this.arr,x);
        },
        set_Item:function(x,v)
        {
-        return IntrinsicFunctionProxy.SetArray(this.arr,x,v);
+        return Arrays.set(this.arr,x,v);
        }
       },{
        New:function(arr)
@@ -1650,11 +1651,10 @@
   Collections=Runtime.Safe(WebSharper.Collections);
   BalancedTree=Runtime.Safe(Collections.BalancedTree);
   Operators=Runtime.Safe(WebSharper.Operators);
-  IntrinsicFunctionProxy=Runtime.Safe(WebSharper.IntrinsicFunctionProxy);
+  Arrays=Runtime.Safe(WebSharper.Arrays);
   Seq=Runtime.Safe(WebSharper.Seq);
   List=Runtime.Safe(WebSharper.List);
   T=Runtime.Safe(List.T);
-  Arrays=Runtime.Safe(WebSharper.Arrays);
   JavaScript=Runtime.Safe(WebSharper.JavaScript);
   JSModule=Runtime.Safe(JavaScript.JSModule);
   Enumerator=Runtime.Safe(WebSharper.Enumerator);

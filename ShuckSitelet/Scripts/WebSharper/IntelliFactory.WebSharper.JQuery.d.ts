@@ -7,17 +7,13 @@ declare module IntelliFactory {
             }
             interface Event {
             }
-            interface AjaxConfig {
+            interface AjaxSettings {
             }
-            interface AnimateConfig {
+            interface AnimateSettings {
             }
             interface Position {
             }
-            interface Support {
-            }
             interface JqXHR {
-            }
-            interface DeferredState {
             }
             interface Deferred {
             }
@@ -26,6 +22,8 @@ declare module IntelliFactory {
             interface DataType {
             }
             interface RequestType {
+            }
+            interface Callbacks {
             }
         }
     }

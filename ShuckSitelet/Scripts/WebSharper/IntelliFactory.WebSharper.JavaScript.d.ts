@@ -143,7 +143,7 @@ declare module IntelliFactory {
             }
             interface Function {
             }
-            interface Object {
+            interface Object<_T1> {
             }
             interface StorageEvent {
             }
